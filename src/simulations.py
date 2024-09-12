@@ -12,6 +12,11 @@ import cv2
 from phi.jax.flow import *
 import json
 
+from .io_utils import *  # Imports all functions and variables from io_utils
+from .cell_dynamics import *  # Imports all functions and variables from cell_dynamics
+from .flow_utils import *  # Imports all functions and variables from flow_utils
+
+
 class Space:
     def __init__(self, field_size, grid_size, initial_flow_speed):
         self.field_size = field_size  # The physical size of the simulation field (in pixels)
