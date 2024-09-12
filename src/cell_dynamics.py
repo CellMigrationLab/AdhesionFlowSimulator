@@ -12,8 +12,6 @@ import cv2
 from phi.jax.flow import *
 import json
 
-
-
 def calculate_attachment_probability(flow_rate, adhesion_strength, background, cell_position):
     """
     Simulate attachment probability considering flow and adhesion strength of cancer cells,
