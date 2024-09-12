@@ -16,7 +16,6 @@ from .io_utils import *  # Imports all functions and variables from io_utils
 from .cell_dynamics import *  # Imports all functions and variables from cell_dynamics
 from .flow_utils import *  # Imports all functions and variables from flow_utils
 
-
 class Space:
     def __init__(self, field_size, grid_size, initial_flow_speed):
         self.field_size = field_size  # The physical size of the simulation field (in pixels)
@@ -34,7 +33,7 @@ class Space:
         self.u_c = np.ones(self.grid_size) * self.initial_flow_speed
         self.v_c = np.zeros(self.grid_size)
 
-def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
+def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, attached_cells_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
     start_time = time.time()
 
     # Save parameters
