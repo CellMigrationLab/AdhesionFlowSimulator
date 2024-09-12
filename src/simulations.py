@@ -29,7 +29,7 @@ class Space:
         self.u_c = np.ones(self.grid_size) * self.initial_flow_speed
         self.v_c = np.zeros(self.grid_size)
 
-  def run_simulation(flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
+def run_simulation(flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
     start_time = time.time()
 
     # Save parameters
