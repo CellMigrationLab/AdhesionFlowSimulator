@@ -12,6 +12,14 @@ import cv2
 from phi.jax.flow import *
 import json
 
+from .io_utils import *  # Imports all functions and variables from io_utils
+from .cell_dynamics import *  # Imports all functions and variables from cell_dynamics
+
+
+# Set water-like properties at 37°C
+viscosity = 0.0007  # In Pa·s
+density = 993  # Density in kg/m³ for water at 37°C
+
 
 # Function to calculate flow rate per frame
 def calculate_flow_rate_per_frame(flow_speed, frame_interval, PIXEL_SIZE):
