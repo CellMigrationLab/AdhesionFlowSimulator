@@ -59,7 +59,7 @@ def get_averaged_flow_vector(space, cell_position, cell_radius, num_samples=8):
     avg_v = np.mean(v_vectors)
 
     return avg_u, avg_v
-def update_flow_field_with_phi_jax(cells, domain_size, grid_res, flow_speed):
+def update_flow_field_with_phi_jax(cells, cell_radius, domain_size, grid_res, flow_speed):
     # Convert the attached cells into phi.jax obstacles (Sphere)
     obstacles = [Sphere(x=pos[0] * (grid_res[0] / domain_size[0]),  # Convert to grid coordinates
                         y=pos[1] * (grid_res[1] / domain_size[1]),  # Convert to grid coordinates
