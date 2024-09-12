@@ -34,7 +34,7 @@ class Space:
         self.u_c = np.ones(self.grid_size) * self.initial_flow_speed
         self.v_c = np.zeros(self.grid_size)
 
-def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
+def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
     start_time = time.time()
 
     # Save parameters
@@ -98,7 +98,7 @@ def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_radiu
             u_interp, v_interp = get_averaged_flow_vector(space, cells[i, 1:3], cell_radius)  # Get the flow vector for movement
 
             attachment_prob = np.random.uniform(0, 1)
-            attachment_rate = calculate_attachment_probability(np.linalg.norm([u_interp, v_interp]), adhesion_strength, background, cells[i, 1:3])
+            attachment_rate = calculate_attachment_probability(np.linalg.norm([u_interp, v_interp]), adhesion_strength, background, cells[i, 1:3], cell_diameter_avg, field_size)
 
             if attachment_prob < attachment_rate:
                 # Attach the cell
