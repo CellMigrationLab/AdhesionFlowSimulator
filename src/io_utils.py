@@ -13,6 +13,61 @@ from phi.jax.flow import *
 import json
 
 
+def load_receptor_map(image_path, field_size=(512, 512), background_percentile=1, rescale_percentile=99):
+    """
+    Load the receptor map from a TIFF image, remove background using a percentile, rescale using another percentile,
+    and ensure it matches the field size.
+
+    Args:
+        image_path (str): Path to the receptor map image (TIFF format).
+        field_size (tuple): Expected size of the output image (default is 512x512).
+        background_percentile (float): The percentile for background subtraction (default is 1st percentile).
+        rescale_percentile (float): The percentile for rescaling the image to [0, 1] (default is 99th percentile).
+
+    Returns:
+        np.ndarray: The processed image array, rescaled to 0-1 and with the background removed.
+    """
+    # Load the image
+    original_image = Image.open(image_path)
+
+    # Convert to NumPy array
+    image_array = np.array(original_image, dtype=np.float32)
+
+    # Resize the image to match the field size if needed
+    if image_array.shape != field_size:
+        image_array = np.array(original_image.resize(field_size, Image.BILINEAR), dtype=np.float32)
+
+    # Background removal using the percentile strategy
+    background_value = np.percentile(image_array, background_percentile)
+    image_array = image_array - background_value  # Subtract the background
+    image_array[image_array < 0] = 0  # Clip negative values to 0
+
+    # Rescale the image based on the rescale percentile (e.g., 99th percentile)
+    upper_value = np.percentile(image_array, rescale_percentile)
+    if upper_value > 0:
+        image_array = np.clip(image_array / upper_value, 0, 1)  # Clip values to ensure they are in [0, 1]
+
+    return image_array
+
+# Generate Simulation Key
+def generate_simulation_key(flow_speed, adhesion_strength, cell_density, run_id, mask_name):
+    return f'{flow_speed}_{adhesion_strength}_{cell_density}_{run_id}_{mask_name}'
+
+# Generate the list of masks or use "uniform"
+def get_masks_or_uniform():
+    if use_receptor_map:
+        return [f for f in os.listdir(receptor_map_image_folder) if f.endswith('.tif')]
+    else:
+        return ['uniform']  # Use "uniform" as a placeholder
+
+# Prepare all simulation parameters with the mask name included
+def create_simulation_keys():
+    mask_list = get_masks_or_uniform()
+    simulation_params = list(product(FLOW_SPEEDS, adhesion_strengths, cell_densities, range(num_runs), mask_list))
+    all_simulation_keys = [generate_simulation_key(*params) for params in simulation_params]
+    return all_simulation_keys, mask_list
+
+
 # Function to generate filenames
 def generate_filename(flow_speed, adhesion_strength, cell_density, run_id, mask_name):
     """
