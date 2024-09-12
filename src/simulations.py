@@ -33,7 +33,7 @@ class Space:
         self.u_c = np.ones(self.grid_size) * self.initial_flow_speed
         self.v_c = np.zeros(self.grid_size)
 
-def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, attached_cells_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
+def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, attached_cells_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
     start_time = time.time()
 
     # Save parameters
@@ -116,7 +116,7 @@ def run_simulation(result_folder, field_size, PIXEL_SIZE, time_steps, cell_diame
 
         if new_attachment_occurred and not disable_flow_recompute:
             print(f"Updating flow field after frame {frame_num}...")
-            u_center, v_center = update_flow_field_with_phi_jax(attached_positions, field_size, grid_size, flow_rate_per_frame)
+            u_center, v_center = update_flow_field_with_phi_jax(attached_positions, cell_radius, field_size, grid_size, flow_rate_per_frame)
             space.u_c = u_center
             space.v_c = v_center
 
