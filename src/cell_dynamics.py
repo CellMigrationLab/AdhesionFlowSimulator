@@ -49,7 +49,7 @@ def calculate_attachment_probability(flow_rate, adhesion_strength, background, c
 
     return adjusted_prob
 
-def calculate_cells_per_step(cell_density, field_size, flow_rate_per_frame):
+def calculate_cells_per_step(cell_density, field_size, flow_rate_per_frame, PIXEL_SIZE):
     # Calculate the area covered per frame in pixels²
     area_covered_per_frame = flow_rate_per_frame * field_size[1]  # field_size[1] is height in pixels
 
