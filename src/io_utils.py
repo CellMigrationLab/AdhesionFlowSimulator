@@ -49,25 +49,6 @@ def load_receptor_map(image_path, field_size=(512, 512), background_percentile=1
 
     return image_array
 
-# Generate Simulation Key
-def generate_simulation_key(flow_speed, adhesion_strength, cell_density, run_id, mask_name):
-    return f'{flow_speed}_{adhesion_strength}_{cell_density}_{run_id}_{mask_name}'
-
-# Generate the list of masks or use "uniform"
-def get_masks_or_uniform():
-    if use_receptor_map:
-        return [f for f in os.listdir(receptor_map_image_folder) if f.endswith('.tif')]
-    else:
-        return ['uniform']  # Use "uniform" as a placeholder
-
-# Prepare all simulation parameters with the mask name included
-def create_simulation_keys():
-    mask_list = get_masks_or_uniform()
-    simulation_params = list(product(FLOW_SPEEDS, adhesion_strengths, cell_densities, range(num_runs), mask_list))
-    all_simulation_keys = [generate_simulation_key(*params) for params in simulation_params]
-    return all_simulation_keys, mask_list
-
-
 # Function to generate filenames
 def generate_filename(flow_speed, adhesion_strength, cell_density, run_id, mask_name):
     """
