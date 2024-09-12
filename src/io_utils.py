@@ -49,6 +49,42 @@ def load_receptor_map(image_path, field_size=(512, 512), background_percentile=1
 
     return image_array
 
+# Function to plot heatmaps for total attached cells
+def plot_heatmaps_total_attached(result_folder):
+    total_attached_df = pd.read_csv(os.path.join(result_folder, 'total_attached_cells.csv'))
+
+    # Ensure Flow_Speed values are of correct type
+    total_attached_df['Flow_Speed'] = total_attached_df['Flow_Speed'].round().astype(int)
+    print("Unique Flow_Speed values in DataFrame:", total_attached_df['Flow_Speed'].unique())
+
+    # Group by parameters excluding Run_ID and average Total_Attached_Cells
+    grouped_df = total_attached_df.groupby(
+        ['Flow_Speed', 'Adhesion_Strength']
+    )['Total_Attached_Cells'].mean().reset_index()
+
+    print("Grouped DataFrame head:\n", grouped_df.head())
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    heatmap_data = grouped_df.pivot(index='Adhesion_Strength', columns='Flow_Speed', values='Total_Attached_Cells')
+
+    cax = ax.imshow(heatmap_data, cmap='jet', aspect='auto', vmin=0, vmax=heatmap_data.max().max())
+    ax.set_title("Total Attached Cells")
+    ax.set_xlabel('Flow Speed')
+    ax.set_ylabel('Adhesion Strength')
+    ax.set_xticks(np.arange(len(FLOW_SPEEDS)))
+    ax.set_xticklabels(FLOW_SPEEDS)
+    ax.set_yticks(np.arange(len(adhesion_strengths)))
+    ax.set_yticklabels(adhesion_strengths)
+
+    fig.colorbar(cax, ax=ax)
+
+    plt.savefig(os.path.join(result_folder, 'heatmap_total_attached_cells.pdf'))
+    plt.show()
+    plt.close(fig)
+
+    print(f"Heatmap plotting completed. Results saved to {result_folder}")
+
+
 # Function to generate filenames
 def generate_filename(flow_speed, adhesion_strength, cell_density, run_id, mask_name):
     """
