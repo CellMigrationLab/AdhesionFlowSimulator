@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from scipy.spatial import distance_matrix
 from tqdm.notebook import tqdm
 
+from .io_utils import *  # Imports all functions and variables from io_utils
+
 # Define Ripley's K function
 def ripley_k(points, r, area):
     n = len(points)
