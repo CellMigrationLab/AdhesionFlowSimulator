@@ -12,7 +12,7 @@ import cv2
 from phi.jax.flow import *
 import json
 
-def calculate_attachment_probability(flow_rate, adhesion_strength, background, cell_position):
+def calculate_attachment_probability(flow_rate, adhesion_strength, background, cell_position, cell_diameter_avg, field_size):
     """
     Simulate attachment probability considering flow and adhesion strength of cancer cells,
     with local endothelial adhesion strength represented by the background map.
