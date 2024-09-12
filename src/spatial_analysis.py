@@ -6,6 +6,8 @@ from scipy.spatial import distance_matrix
 from tqdm.notebook import tqdm
 
 from .io_utils import *  # Imports all functions and variables from io_utils
+from .flow_utils import *  # Imports all functions and variables from flow_utils
+
 
 # Define Ripley's K function
 def ripley_k(points, r, area):
@@ -76,7 +78,7 @@ def plot_heatmaps_ripley_l(result_folder, radius=51):
 
 
 # Function to compute Ripley's L function for each simulation
-def compute_ripley_l(result_folder, radii):
+def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZE):
     attached_cells_folder = os.path.join(result_folder, 'attached_cells')
     ripley_folder = os.path.join(result_folder, 'ripley_folder')
     os.makedirs(ripley_folder, exist_ok=True)
@@ -124,7 +126,7 @@ def compute_ripley_l(result_folder, radii):
         if filename_without_extension in params_df['Filename'].values:
             params = params_df[params_df['Filename'] == filename_without_extension].iloc[0]
             flow_speed = float(params['Flow_Speed'])
-            flow_rate_per_frame = calculate_flow_rate_per_frame(flow_speed, FRAME_INTERVAL)
+            flow_rate_per_frame = calculate_flow_rate_per_frame(flow_speed, FRAME_INTERVAL, PIXEL_SIZE)
             adhesion_strength = float(params['Adhesion_Strength'])
             mask_name = params['Mask_Name']
             cell_density = float(params['Cell_Density'])
