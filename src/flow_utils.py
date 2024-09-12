@@ -14,7 +14,7 @@ import json
 
 
 # Function to calculate flow rate per frame
-def calculate_flow_rate_per_frame(flow_speed, frame_interval):
+def calculate_flow_rate_per_frame(flow_speed, frame_interval, PIXEL_SIZE):
     return flow_speed * frame_interval / PIXEL_SIZE  # Convert to pixels per frame
 
 
