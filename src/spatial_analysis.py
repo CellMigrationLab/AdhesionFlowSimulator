@@ -19,6 +19,60 @@ def ripley_l(points, r, area):
     L_r = np.sqrt(K_r / np.pi) - r
     return L_r
 
+def plot_heatmaps_ripley_l(result_folder, radius=51):
+    # Load Ripley L values
+    ripley_l_df = pd.read_csv(os.path.join(result_folder, 'Ripley_L_Values.csv'))
+
+    # Ensure Flow_Speed and Adhesion_Strength values are of correct type
+    ripley_l_df['Flow_Speed'] = ripley_l_df['Flow_Speed']
+    ripley_l_df['Adhesion_Strength'] = ripley_l_df['Adhesion_Strength']
+
+    # Filter the data for the specific radius
+    filtered_df = ripley_l_df[ripley_l_df['Radius'] == radius]
+
+    if filtered_df.empty:
+        print(f"No data available for radius {radius}.")
+        return
+
+    # Group by parameters and calculate the average L_Value
+    grouped_df = filtered_df.groupby(
+        ['Flow_Speed', 'Adhesion_Strength']
+    )['L_Value'].mean().reset_index()
+
+    print("Grouped DataFrame head:\n", grouped_df.head())
+
+    # Pivot the DataFrame for heatmap
+    heatmap_data = grouped_df.pivot(
+        index='Adhesion_Strength', columns='Flow_Speed', values='L_Value'
+    )
+
+    # Plot heatmap
+    fig, ax = plt.subplots(figsize=(12, 8))
+    # Set background color of the axes
+    ax.set_facecolor('yellow')
+
+    # Plot the heatmap with chosen colormap, fixed range -50 to +50
+    cax = ax.imshow(heatmap_data, cmap='coolwarm', aspect='auto', vmin=-50, vmax=50)
+
+    ax.set_title(f"Ripley's L Function Heatmap at Radius {radius}")
+    ax.set_xlabel('Flow Speed')
+    ax.set_ylabel('Adhesion Strength')
+    ax.set_xticks(np.arange(len(heatmap_data.columns)))
+    ax.set_xticklabels(heatmap_data.columns)
+    ax.set_yticks(np.arange(len(heatmap_data.index)))
+    ax.set_yticklabels(heatmap_data.index)
+
+    # Add colorbar
+    cbar = fig.colorbar(cax, ax=ax, orientation='vertical')
+    cbar.set_label("L Value")
+
+    plt.savefig(os.path.join(result_folder, f'heatmap_ripley_l_values_radius_{radius}.pdf'))
+    plt.show()
+    plt.close(fig)
+
+    print(f"Heatmap plotting completed for radius {radius}. Results saved to {result_folder}")
+
+
 # Function to compute Ripley's L function for each simulation
 def compute_ripley_l(result_folder, radii):
     attached_cells_folder = os.path.join(result_folder, 'attached_cells')
