@@ -190,4 +190,66 @@ def load_masks_and_compute_average(mask_folder, background_percentile=1, rescale
 
     return overall_average
 
+# Function to format numeric values based on their type
+def format_numeric_value(value):
+    if isinstance(value, int):
+        return str(value)
+    elif isinstance(value, float):
+        if value.is_integer():
+            return str(int(value))  # Convert float to int if it has no decimal part
+        else:
+            return f"{value:.2f}".rstrip('0').rstrip('.')  # Format float with 2 decimal places, remove trailing zeros and dot
+    else:
+        return str(value)
 
+
+
+def sum_attached_cells_over_time(result_folder, count_folder):
+    # Load simulation parameters
+    params_df = pd.read_csv(os.path.join(result_folder, 'simulation_parameters.csv'))
+
+    # Generate a list of unique filenames based on parameters
+    params_df['Filename'] = params_df.apply(
+        lambda row: generate_filename(row['Flow_Speed'], row['Adhesion_Strength'], row['Cell_Density'], row['Run_ID'], row['Mask_Name']).replace('.csv', '_counts.csv'),
+        axis=1
+    )
+
+    # Get only unique filenames
+    unique_filenames = params_df['Filename'].unique()
+
+    # Initialize the list to store the total attached cells
+    total_attached_cells = []
+
+    # Use tqdm to show progress while processing unique filenames
+    for filename in tqdm(unique_filenames, desc="Collecting attached cells from the last row"):
+        file_path = os.path.join(count_folder, filename)
+
+        if os.path.exists(file_path):
+            # Read the file containing arrested cells over time
+            arrested_cells_df = pd.read_csv(file_path)
+
+            # Get the value from the last row of the 'Attached_Count' column
+            total_arrested_cells = arrested_cells_df['Attached_Count'].iloc[-1]
+
+            # Extract the parameters associated with this filename (taking the first occurrence)
+            row = params_df[params_df['Filename'] == filename].iloc[0]
+
+            # Append the total number of arrested cells and simulation parameters to the list
+            total_attached_cells.append({
+                'Flow_Speed': row['Flow_Speed'],
+                'Adhesion_Strength': row['Adhesion_Strength'],
+                'Mask_Name': row['Mask_Name'],
+                'Cell_Density': row['Cell_Density'],
+                'Run_ID': row['Run_ID'],
+                'Total_Attached_Cells': total_arrested_cells
+            })
+        else:
+            print(f"File not found: {filename}")
+
+    # Convert the list of total attached cells to a DataFrame
+    total_attached_cells_df = pd.DataFrame(total_attached_cells)
+
+    # Save the result to total_attached_cells.csv in the result folder
+    output_path = os.path.join(result_folder, 'total_attached_cells.csv')
+    total_attached_cells_df.to_csv(output_path, index=False)
+    print(f"Total attached cells data saved to {output_path}")
