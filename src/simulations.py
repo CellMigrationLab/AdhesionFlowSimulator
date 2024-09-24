@@ -123,7 +123,7 @@ def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps,
 
             # Plot all attached cells
             attached_cell_positions = np.array(attached_positions)
-            plt.scatter(attached_cell_positions[:, 0], attached_cell_positions[:, 1], color='red', s=cell_area_avg/2, label='Attached Cells')
+            plt.scatter(attached_cell_positions[:, 0], attached_cell_positions[:, 1], color='red', s=cell_diameter_avg, label='Attached Cells')
 
             plt.title(f"Flow Field After Frame {frame_num}")
             plt.gca()
