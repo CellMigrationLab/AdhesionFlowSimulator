@@ -36,9 +36,6 @@ class Space:
 def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, attached_cells_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
     start_time = time.time()
 
-    # Save parameters
-    save_parameters(result_folder, flow_speed, adhesion_strength, cell_density, run_id, mask_name)
-
     # Calculate the number of cells to introduce per step
     cells_per_step = calculate_cells_per_step(cell_density, field_size, flow_rate_per_frame, PIXEL_SIZE)
     total_cells = int(cells_per_step * time_steps) + 1
