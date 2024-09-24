@@ -33,7 +33,7 @@ class Space:
         self.u_c = np.ones(self.grid_size) * self.initial_flow_speed
         self.v_c = np.zeros(self.grid_size)
 
-def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, attached_cells_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
+def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps, cell_diameter_avg, cell_radius, cell_area_avg, space, flow_rate_per_frame, flow_speed, adhesion_strength, cell_density, positions_folder, counts_folder, attachment_matrix_folder, flow_pattern_folder, attached_cells_folder, run_id, background, create_video=False, debug_mode=False, disable_flow_recompute=False, mask_name='uniform'):
     start_time = time.time()
 
     # Calculate the number of cells to introduce per step
@@ -123,7 +123,7 @@ def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps,
 
             # Plot all attached cells
             attached_cell_positions = np.array(attached_positions)
-            plt.scatter(attached_cell_positions[:, 0], attached_cell_positions[:, 1], color='red', s=cell_diameter_avg, label='Attached Cells')
+            plt.scatter(attached_cell_positions[:, 0], attached_cell_positions[:, 1], color='red', s=cell_area_avg/2, label='Attached Cells')
 
             plt.title(f"Flow Field After Frame {frame_num}")
             plt.gca()
@@ -142,7 +142,7 @@ def run_simulation(result_folder, field_size, grid_size, PIXEL_SIZE, time_steps,
             ax.set_xlim(0, field_size[0])
             ax.set_ylim(0, field_size[1])
             colors = ['red' if status == 1 else 'blue' for status in cells[:, 3]]
-            ax.scatter(cells[:, 1], cells[:, 2], c=colors, s=cell_area_avg, edgecolors='k')
+            ax.scatter(cells[:, 1], cells[:, 2], c=colors, s=cell_area_avg/2, edgecolors='k')
             plt.pause(0.01)  # Pause to update the display
             clear_output(wait=True)
             display(fig)
