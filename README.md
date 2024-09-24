@@ -19,3 +19,8 @@ The simulations use real-time flow adjustments and cell attachment dynamics to g
 - **Ripley’s L Function**: Analyze spatial point patterns using Ripley’s L function to assess clustering of attached cells.
 - **Heatmaps and Visualization**: Generate visual outputs like flow fields, heatmaps, and cell trajectory videos.
 - **Checkpointing**: Save and resume simulations from checkpoints to handle large-scale runs efficiently.
+
+## Quick start
+[![Open in Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CellMigrationLab/AdhesionFlowSimulator/blob/refs/tags/v0.1/notebooks/AdhesionFlowSimulator.ipynb)
+
+
