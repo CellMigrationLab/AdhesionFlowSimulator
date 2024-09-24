@@ -76,9 +76,8 @@ def plot_heatmaps_ripley_l(result_folder, radius=51):
 
     print(f"Heatmap plotting completed for radius {radius}. Results saved to {result_folder}")
 
-
 # Function to compute Ripley's L function for each simulation
-def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZE):
+def compute_ripley_l(result_folder, radii):
     attached_cells_folder = os.path.join(result_folder, 'attached_cells')
     ripley_folder = os.path.join(result_folder, 'ripley_folder')
     os.makedirs(ripley_folder, exist_ok=True)
@@ -95,7 +94,6 @@ def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZ
     ]
 
     expected_filenames = list(set(expected_filenames))
-
 
     for filename in tqdm(expected_filenames, desc="Computing Ripley's L"):
         file_path = os.path.join(attached_cells_folder, filename)
@@ -116,7 +114,8 @@ def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZ
         elif attached_positions.ndim != 2 or attached_positions.shape[1] != 2:
             attached_positions = np.empty((0, 2))
 
-        if attached_positions.shape[0] > 0:
+        # Check if at least two cells are attached before computing Ripley's L
+        if attached_positions.shape[0] >= 2:
             L_values = [ripley_l(attached_positions, r, area) for r in radii]
         else:
             L_values = [np.nan] * len(radii)
@@ -126,7 +125,7 @@ def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZ
         if filename_without_extension in params_df['Filename'].values:
             params = params_df[params_df['Filename'] == filename_without_extension].iloc[0]
             flow_speed = float(params['Flow_Speed'])
-            flow_rate_per_frame = calculate_flow_rate_per_frame(flow_speed, FRAME_INTERVAL, PIXEL_SIZE)
+            flow_rate_per_frame = calculate_flow_rate_per_frame(flow_speed, FRAME_INTERVAL)
             adhesion_strength = float(params['Adhesion_Strength'])
             mask_name = params['Mask_Name']
             cell_density = float(params['Cell_Density'])
@@ -149,7 +148,7 @@ def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZ
             })
 
         # Plot Ripley's L function
-        if attached_positions.shape[0] > 0:
+        if attached_positions.shape[0] >= 2:
             plt.figure(figsize=(10, 5))
             plt.plot(radii, L_values, label=f"L(r) for Flow {flow_speed} μm/s, Adhesion {adhesion_strength}, Mask_Name {mask_name}, Density {cell_density}, Run {run_id}")
             plt.xlabel('Radius (r) (micrometers)')
