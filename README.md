@@ -1,5 +1,8 @@
 # Adhesion Flow Simulator
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13835127.svg)](https://doi.org/10.5281/zenodo.13835127)
+
+
 
 The **Adhesion Flow Simulator** is a computational tool designed to simulate and visualize the behavior of cells under the influence of fluid flow. This pipeline models cell attachment to endothelial surfaces, guided by factors like flow speed, adhesion strength, and receptor map data. The simulator integrates biophysical properties of cells and fluid dynamics, offering insights into cell behavior in various conditions.
 
