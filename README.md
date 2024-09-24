@@ -23,4 +23,8 @@ The simulations use real-time flow adjustments and cell attachment dynamics to g
 ## Quick start
 [![Open in Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CellMigrationLab/AdhesionFlowSimulator/blob/refs/tags/v0.1/notebooks/AdhesionFlowSimulator.ipynb)
 
+## Citation
+
+
+
 
