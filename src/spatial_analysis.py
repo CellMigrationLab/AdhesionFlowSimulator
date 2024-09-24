@@ -148,7 +148,7 @@ def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZ
         if filename_without_extension in params_df['Filename'].values:
             params = params_df[params_df['Filename'] == filename_without_extension].iloc[0]
             flow_speed = float(params['Flow_Speed'])
-            flow_rate_per_frame = calculate_flow_rate_per_frame(flow_speed, FRAME_INTERVAL)
+            flow_rate_per_frame = calculate_flow_rate_per_frame(flow_speed, FRAME_INTERVAL, PIXEL_SIZE)
             adhesion_strength = float(params['Adhesion_Strength'])
             mask_name = params['Mask_Name']
             cell_density = float(params['Cell_Density'])
