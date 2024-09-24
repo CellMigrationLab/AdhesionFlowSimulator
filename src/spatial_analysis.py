@@ -38,14 +38,36 @@ def plot_heatmaps_ripley_l(result_folder, radius=51):
         print(f"No data available for radius {radius}.")
         return
 
-    # Group by parameters and calculate the average L_Value
+    # Remove rows where L_Value is NaN for counting, but keep the full DataFrame for plotting
+    cleaned_df = filtered_df.dropna(subset=['L_Value'])
+
+    # Group by parameters and calculate the average L_Value (after removing NaN)
     grouped_df = filtered_df.groupby(
         ['Flow_Speed', 'Adhesion_Strength']
     )['L_Value'].mean().reset_index()
 
-    print("Grouped DataFrame head:\n", grouped_df.head())
+    # Count the number of values for each combination of Flow_Speed and Adhesion_Strength, excluding NaN
+    count_per_condition = cleaned_df.groupby(['Flow_Speed', 'Adhesion_Strength']).size().reset_index(name='Count')
 
-    # Pivot the DataFrame for heatmap
+    # Print the counts for each condition
+    print("Number of values per condition (Flow Speed, Adhesion Strength), excluding NaN values:")
+    print(count_per_condition)
+
+    # Check if there are fewer than 10 values for any condition
+    problematic_conditions = count_per_condition[count_per_condition['Count'] < 10]
+
+    # If any conditions have fewer than 10 values, print a specific warning
+    if not problematic_conditions.empty:
+        print(f"Warning: The following conditions have fewer than 10 values for radius {radius}:")
+        for _, row in problematic_conditions.iterrows():
+            flow_speed, adhesion_strength, count = row['Flow_Speed'], row['Adhesion_Strength'], row['Count']
+            print(f"  - Flow Speed: {flow_speed}, Adhesion Strength: {adhesion_strength}, Count: {count}")
+
+    # Save the cleaned DataFrame (after removing NaNs) for further analysis
+    cleaned_df.to_csv(os.path.join(result_folder, f'cleaned_ripley_l_values_radius_{radius}.csv'), index=False)
+    print(f"Final DataFrame (after removing NaNs) saved to {result_folder}")
+
+    # Pivot the grouped DataFrame (with averages) for heatmap
     heatmap_data = grouped_df.pivot(
         index='Adhesion_Strength', columns='Flow_Speed', values='L_Value'
     )
@@ -70,6 +92,7 @@ def plot_heatmaps_ripley_l(result_folder, radius=51):
     cbar = fig.colorbar(cax, ax=ax, orientation='vertical')
     cbar.set_label("L Value")
 
+    # Save heatmap
     plt.savefig(os.path.join(result_folder, f'heatmap_ripley_l_values_radius_{radius}.pdf'))
     plt.show()
     plt.close(fig)
