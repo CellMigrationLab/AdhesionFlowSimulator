@@ -23,7 +23,7 @@ def ripley_l(points, r, area):
     L_r = np.sqrt(K_r / np.pi) - r
     return L_r
 
-def plot_heatmaps_ripley_l(result_folder, radius, field_size, FRAME_INTERVAL, PIXEL_SIZE):
+def plot_heatmaps_ripley_l(result_folder, radius=51):
     # Load Ripley L values
     ripley_l_df = pd.read_csv(os.path.join(result_folder, 'Ripley_L_Values.csv'))
 
@@ -100,7 +100,7 @@ def plot_heatmaps_ripley_l(result_folder, radius, field_size, FRAME_INTERVAL, PI
     print(f"Heatmap plotting completed for radius {radius}. Results saved to {result_folder}")
 
 # Function to compute Ripley's L function for each simulation
-def compute_ripley_l(result_folder, radii):
+def compute_ripley_l(result_folder, radii, field_size, FRAME_INTERVAL, PIXEL_SIZE):
     attached_cells_folder = os.path.join(result_folder, 'attached_cells')
     ripley_folder = os.path.join(result_folder, 'ripley_folder')
     os.makedirs(ripley_folder, exist_ok=True)
