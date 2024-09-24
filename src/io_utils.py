@@ -292,3 +292,53 @@ def sum_attached_cells_over_time(result_folder, count_folder):
     output_path = os.path.join(result_folder, 'total_attached_cells.csv')
     total_attached_cells_df.to_csv(output_path, index=False)
     print(f"Total attached cells data saved to {output_path}")
+
+
+def plot_arrested_cells(result_folder, cell_diameter_avg=10, field_size=(512, 512)):
+    # Path where the position files are located (e.g., attached_cells folder)
+    attached_cells_folder = os.path.join(result_folder, 'attached_cells')
+    if not os.path.exists(attached_cells_folder):
+        print(f"Attached cells folder not found: {attached_cells_folder}")
+        return
+
+    # Create a new folder to save the plots
+    arrested_cells_plot_folder = os.path.join(result_folder, 'arrested_cells_plots')
+    os.makedirs(arrested_cells_plot_folder, exist_ok=True)
+
+    # Iterate through all files in the attached_cells folder
+    for filename in os.listdir(attached_cells_folder):
+        if filename.endswith('.csv'):
+            # Load the position data
+            file_path = os.path.join(attached_cells_folder, filename)
+            positions_df = pd.read_csv(file_path)
+
+            # Only plot if there are 2 or more attached cells
+            if len(positions_df) < 2:
+                print(f"Less than 2 attached cells found in {filename}. Skipping plot.")
+                continue
+
+            # Plot attached cells
+            plt.figure(figsize=(6, 6))
+            plt.xlim(0, field_size[0])
+            plt.ylim(0, field_size[1])
+            plt.gca().set_aspect('equal', adjustable='box')
+            plt.title(f"Attached Cells - {filename}")
+
+            # Plot the positions of attached cells
+            for _, row in positions_df.iterrows():
+                plt.gca().add_patch(plt.Circle(
+                    (row['X_Position'], row['Y_Position']),
+                    cell_diameter_avg / 2,
+                    color='red',
+                    alpha=0.6
+                ))
+
+            plt.xlabel('X Position')
+            plt.ylabel('Y Position')
+
+            # Save plot as PNG
+            plot_path = os.path.join(arrested_cells_plot_folder, f"{filename.replace('.csv', '')}_attached_cells.png")
+            plt.savefig(plot_path, bbox_inches='tight')
+            plt.close()
+
+            print(f"Attached cells plot saved to {plot_path}")
