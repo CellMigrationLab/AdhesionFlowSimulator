@@ -141,8 +141,6 @@ def save_parameters(result_folder, flow_speed, adhesion_strength, cell_density, 
 
 def create_video_from_positions(positions, video_path, field_size=(512, 512), cell_diameter_avg=10, total_simulation_time=10, frame_interval=1, fps=25):
     """Create a video from the saved positions using OpenCV."""
-
-    # Check if positions is a file path or a numpy array
     if isinstance(positions, str):
         positions_df = pd.read_csv(positions, compression='gzip')
     else:
@@ -150,31 +148,33 @@ def create_video_from_positions(positions, video_path, field_size=(512, 512), ce
 
     max_frame = int(positions_df['Frame_Num'].max()) + 1
 
-    # Calculate the fps based on the total simulation time and number of frames if not provided
     if not fps:
         fps = max_frame / total_simulation_time
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video_writer = cv2.VideoWriter(video_path, fourcc, fps, (field_size[0], field_size[1]))
 
-    # Use tqdm to show the progress bar
-    for frame_num in tqdm(range(max_frame), desc="Creating Video"):
-        # Create a blank white frame
-        frame = np.ones((field_size[1], field_size[0], 3), dtype=np.uint8) * 255
+    # Define edge buffer based on cell diameter
+    edge_buffer = int(cell_diameter_avg / 2)
 
-        # Get the positions for this frame
+    for frame_num in tqdm(range(max_frame), desc="Creating Video"):
+        frame = np.ones((field_size[1], field_size[0], 3), dtype=np.uint8) * 255
         frame_positions = positions_df[positions_df['Frame_Num'] == frame_num]
 
-        # Filter out inactive cells (status == 0) that are out of the field of view
-        active_positions = frame_positions[(frame_positions['Status'] == 1) | (frame_positions['X_Position'] < field_size[0])]
+        # Filter out positions that are too close to the edges
+        active_positions = frame_positions[
+            (frame_positions['X_Position'] >= edge_buffer) &
+            (frame_positions['X_Position'] <= field_size[0] - edge_buffer) &
+            (frame_positions['Y_Position'] >= edge_buffer) &
+            (frame_positions['Y_Position'] <= field_size[1] - edge_buffer) &
+            ((frame_positions['Status'] == 1) | (frame_positions['Status'] == 0))
+        ]
 
-        # Draw all circles for the current frame using OpenCV
         for _, row in active_positions.iterrows():
             x, y, status = int(row['X_Position']), int(row['Y_Position']), row['Status']
-            color = (0, 0, 255) if status == 1 else (255, 0, 0)  # Red for attached, Blue for moving
-            cv2.circle(frame, (x, y), int(cell_diameter_avg / 2), color, -1, lineType=cv2.LINE_AA)
+            color = (0, 0, 255) if status == 1 else (255, 0, 0)
+            cv2.circle(frame, (x, y), edge_buffer, color, -1, lineType=cv2.LINE_AA)
 
-        # Only write every nth frame to the video
         if frame_num % frame_interval == 0:
             video_writer.write(frame)
 
