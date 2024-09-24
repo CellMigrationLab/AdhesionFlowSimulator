@@ -23,7 +23,7 @@ def ripley_l(points, r, area):
     L_r = np.sqrt(K_r / np.pi) - r
     return L_r
 
-def plot_heatmaps_ripley_l(result_folder, radius=51):
+def plot_heatmaps_ripley_l(result_folder, radius=51, field_size, FRAME_INTERVAL, PIXEL_SIZE):
     # Load Ripley L values
     ripley_l_df = pd.read_csv(os.path.join(result_folder, 'Ripley_L_Values.csv'))
 
