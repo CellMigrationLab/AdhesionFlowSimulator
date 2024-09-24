@@ -11,6 +11,8 @@ import pandas as pd
 import cv2
 from phi.jax.flow import *
 import json
+from IPython.display import clear_output
+
 
 from .io_utils import *  # Imports all functions and variables from io_utils
 from .cell_dynamics import *  # Imports all functions and variables from cell_dynamics
