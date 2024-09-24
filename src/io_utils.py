@@ -50,7 +50,6 @@ def load_receptor_map(image_path, field_size=(512, 512), background_percentile=1
     return image_array
 
 # Function to plot heatmaps for total attached cells
-# Function to plot heatmaps for total attached cells
 def plot_heatmaps_total_attached(result_folder):
     total_attached_df = pd.read_csv(os.path.join(result_folder, 'total_attached_cells.csv'))
 
@@ -89,8 +88,6 @@ def plot_heatmaps_total_attached(result_folder):
     plt.close(fig)
 
     print(f"Heatmap plotting completed. Results saved to {result_folder}")
-
-
 
 # Function to generate filenames
 def generate_filename(flow_speed, adhesion_strength, cell_density, run_id, mask_name):
@@ -244,7 +241,6 @@ def format_numeric_value(value):
             return f"{value:.2f}".rstrip('0').rstrip('.')  # Format float with 2 decimal places, remove trailing zeros and dot
     else:
         return str(value)
-
 
 
 def sum_attached_cells_over_time(result_folder, count_folder):
