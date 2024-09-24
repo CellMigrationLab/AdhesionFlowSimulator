@@ -5,7 +5,9 @@ The **Adhesion Flow Simulator** is a computational tool designed to simulate and
 
 The simulations use real-time flow adjustments and cell attachment dynamics to generate data, which can be visualized through heatmaps, flow fields, and Ripley’s L function analysis.
 
-<img src="https://github.com/CellMigrationLab/AdhesionFlowSimulator/blob/main/images/example.gif" width="300px" alt="Example simulation">
+| Example of Simulation | Example of Flow Field computation |
+|----------------|-----------|
+| <img src="https://github.com/CellMigrationLab/AdhesionFlowSimulator/blob/main/images/example.gif" width="300px" alt="Example simulation"> | <img src="https://github.com/CellMigrationLab/AdhesionFlowSimulator/blob/main/images/flow_field.png?raw=true" width="300px" alt="PNG image"> |
 
 ## Features
 
