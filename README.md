@@ -2,9 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13835127.svg)](https://doi.org/10.5281/zenodo.13835127)
 
-
-
-The **Adhesion Flow Simulator** is a computational tool designed to simulate and visualize the behavior of cells under the influence of fluid flow. This pipeline models cell attachment to endothelial surfaces, guided by factors like flow speed, adhesion strength, and receptor map data. The simulator integrates biophysical properties of cells and fluid dynamics, offering insights into cell behavior in various conditions.
+The **Adhesion Flow Simulator** is a computational tool designed to simulate the behavior of cells under under flow. We use this pipeline models cell attachment to endothelial surfaces, guided by factors like flow speed, adhesion strength, and receptor map data. The simulator integrates biophysical properties of cells and fluid dynamics, offering insights into cell behavior in various conditions.
 
 The simulations use real-time flow adjustments and cell attachment dynamics to generate data, which can be visualized through heatmaps, flow fields, and Ripley’s L function analysis.
 
@@ -14,14 +12,21 @@ The simulations use real-time flow adjustments and cell attachment dynamics to g
 
 ## Features
 
-- **Flow-Driven Simulations**: Simulate cell movement and attachment in a fluid environment with tunable flow speeds.
-- **Receptor Map Support**: Load receptor map images to introduce spatial heterogeneity in cell adhesion probabilities.
-- **Ripley’s L Function**: Analyze spatial point patterns using Ripley’s L function to assess clustering of attached cells.
-- **Heatmaps and Visualization**: Generate visual outputs like flow fields, heatmaps, and cell trajectory videos.
-- **Checkpointing**: Save and resume simulations from checkpoints to handle large-scale runs efficiently.
+- **Flow-Driven Simulations**: Simulate cell movement and attachment in fluid environments with customizable flow speeds and fluid properties.
+- **Receptor Map Support**: Load receptor map images, such as CD44 stainings, to introduce spatial heterogeneity in cell adhesion probabilities across the endothelial surface.
+- **Ripley’s L Function**: Quantitatively assess spatial clustering of attached cells using Ripley’s L function, allowing for in-depth analysis of clustering behavior.
+- **Heatmaps and Visualization**: Automatically generate visual outputs such as heatmaps of attached cells, flow fields, and simulation videos showcasing cell trajectories.
+- **Static vs. Dynamic Flow Fields**: Choose between static flow conditions, where flow remains constant, or dynamic conditions, where flow is updated after each cell attachment to account for changes in fluid dynamics.
+- **Checkpointing**: Save simulation progress and resume large-scale runs with minimal computational overhead, ensuring efficient handling of extensive simulations.
 
-## Quick start
+## Quick Start
+
+You can quickly try out the **Adhesion Flow Simulator** using Google Colab:
 [![Open in Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CellMigrationLab/AdhesionFlowSimulator/blob/refs/tags/v0.1/notebooks/AdhesionFlowSimulator.ipynb)
+
+## Acknowledgments
+
+The [phiFlow Python](https://github.com/tum-pbs/PhiFlow) package is used for solving the Navier-Stokes equations in dynamic flow simulations.
 
 ## Citation
 
