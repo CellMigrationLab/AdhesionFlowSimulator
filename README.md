@@ -30,6 +30,10 @@ The [phiFlow Python](https://github.com/tum-pbs/PhiFlow) package is used for sol
 
 ## Citation
 
+**Fast label-free live imaging reveals key roles of flow dynamics and CD44-HA interaction in cancer cell arrest on endothelial monolayers**  
+Gautier Follain, Sujan Ghimire, Joanna W Pylvänäinen, Monika Vaitkevičiūtė, Diana H Wurzinger, Camilo Guzmán, James RW Conway, Michal Dibus, Sanna Oikari, Kirsi Rilla, Marko Salmi, Johanna Ivaska, Guillaume Jacquemet  
+*bioRxiv* (2024). doi: [10.1101/2024.09.30.615654](https://doi.org/10.1101/2024.09.30.615654)
+
 
 
 
